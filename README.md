@@ -35,3 +35,5 @@ Elasticsearch, MongoDB, Kafka, and others, with minimal
 configuration.
 
 For more details, see the [home page](http://calcite.apache.org).
+
+this edition gives more comment.
