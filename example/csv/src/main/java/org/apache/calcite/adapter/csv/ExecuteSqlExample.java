@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.calcite.sql.validate;
+package org.apache.calcite.adapter.csv;
 
 import java.sql.*;
 
