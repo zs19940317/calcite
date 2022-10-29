@@ -31,8 +31,11 @@ public class ExecuteSqlExample {
         "\\example\\csv\\src\\test\\resources" +
         "\\model.json")) {
       Statement statement = connection.createStatement();
+      String sql = "SELECT NAME, COUNT(DEPTNO) FROM (SELECT DEPTNO, NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) WHERE NAME = 'sunshy'";
+
+
       ResultSet resultSet = statement.executeQuery(
-          "SELECT NAME, COUNT(DEPTNO) FROM (SELECT DEPTNO, NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) WHERE NAME = 'sunshy' GROUP BY NAME");
+          sql);
 
       ResultSetMetaData metaData = resultSet.getMetaData();
 

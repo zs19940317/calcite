@@ -753,8 +753,14 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
   }
 
   @Override public SqlNode validate(SqlNode topNode) {
+    // EmptyScope is the top scope of all of the scopes in current sql
+    // EmptyScope mainly remark the outermost scope of current sql
     SqlValidatorScope scope = new EmptyScope(this);
+    // catalogScope can see all the schemas defined in catalog.
+    // CatalogScope use EmptyScope as the parentScope
+    // it is used to resolve the columns like `schema.table.column`
     scope = new CatalogScope(scope, ImmutableList.of("CATALOG"));
+    // the entrypoint to validate the sql
     final SqlNode topNode2 = validateScopedExpression(topNode, scope);
     final RelDataType type = getValidatedNodeType(topNode2);
     Util.discard(type);
@@ -1039,14 +1045,30 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
     return validateScopedExpression(topNode, scope);
   }
 
+  /**
+   * the entry point to validate sql
+   * @param topNode the SqlNode that represents the original sql
+   * @param scope in the entryPoint it is the CatalogScope
+   * @return validated SqlNode
+   */
   private SqlNode validateScopedExpression(
       SqlNode topNode,
       SqlValidatorScope scope) {
+
+    // todo interpretes the detail of the rewrite procedure
+    // it is an rewrite procedure.
     SqlNode outermostNode = performUnconditionalRewrites(topNode, false);
+
+    // todo understand what the cursorSet do
     cursorSet.add(outermostNode);
+    // it remarks the outermostNode of current SqlNode, in the entrypoint
+    // it is the original SqlNode that represents the original sql
     top = outermostNode;
     TRACER.trace("After unconditional rewrite: {}", outermostNode);
+
+    // top level SqlKind contains QUERY DDL and DML
     if (outermostNode.isA(SqlKind.TOP_LEVEL)) {
+      // the method register all scopes and namespaces that related to this sqlNode
       registerQuery(scope, null, outermostNode, outermostNode, null, false);
     }
     outermostNode.validate(this, scope);
@@ -2710,11 +2732,18 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
 
     SqlCall call;
     List<SqlNode> operands;
+
+    // the register process
     switch (node.getKind()) {
     case SELECT:
+      // enter SELECT clause register process
       final SqlSelect select = (SqlSelect) node;
+      // if the initial sql is a select clause, the sql itself is a namespace.
+      // commonly speaking, the namespace of a sql contains table, view, and subQuery. the select query itself
+      // represents the outermost 'subquery'
       final SelectNamespace selectNs =
           createSelectNamespace(select, enclosingNode);
+      // register the outermost namespace, this method mainly put the namespace into namespaces variable
       registerNamespace(usingScope, alias, selectNs, forceNullable);
       final SqlValidatorScope windowParentScope =
           (usingScope != null) ? usingScope : parentScope;
