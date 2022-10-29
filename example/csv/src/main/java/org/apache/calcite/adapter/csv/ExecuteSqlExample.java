@@ -32,7 +32,7 @@ public class ExecuteSqlExample {
         "\\model.json")) {
       Statement statement = connection.createStatement();
       ResultSet resultSet = statement.executeQuery(
-          "SELECT NAME, COUNT(DEPTNO) FROM (SELECT DEPTNO, NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) WHERE NAME = 'sunshy' GROUP BY NAME HVING COUNT(DEPTNO) > 1");
+          "SELECT NAME, COUNT(DEPTNO) FROM (SELECT DEPTNO, NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) WHERE NAME = 'sunshy' GROUP BY NAME");
 
       ResultSetMetaData metaData = resultSet.getMetaData();
 

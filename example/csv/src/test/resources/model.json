@@ -25,7 +25,7 @@
       "type": "custom",
       "factory": "org.apache.calcite.adapter.csv.CsvSchemaFactory",
       "operand": {
-        "directory": "E:\\code\\calcite_with_comment\\calcite\\example\\csv\\src\\test\\resources\\sales"
+        "directory": "/Users/zhangshuai/code/calcite/example/csv/src/test/resources/sales"
       }
     }
   ]
