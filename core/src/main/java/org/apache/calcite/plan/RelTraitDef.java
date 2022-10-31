@@ -83,7 +83,8 @@ public abstract class RelTraitDef<T extends RelTrait> {
   public abstract Class<T> getTraitClass();
 
   /** Returns a simple name for this RelTraitDef (for use in
-   * {@link org.apache.calcite.rel.RelNode#explain}). */
+   * {@link org.apache.calcite.rel.RelNode#explain}).
+   */
   public abstract String getSimpleName();
 
   /**

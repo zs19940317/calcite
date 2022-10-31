@@ -1242,7 +1242,10 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
       return registerSubset(set, (RelSubset) rel);
     }
 
+    // validate if this RelNode is registered
     assert !isRegistered(rel) : "already been registered: " + rel;
+
+    // there are two planners in apache calcite: volcanoPlaner or HepPlanner
     if (rel.getCluster().getPlanner() != this) {
       throw new AssertionError("Relational expression " + rel
           + " belongs to a different planner than is currently being used.");
