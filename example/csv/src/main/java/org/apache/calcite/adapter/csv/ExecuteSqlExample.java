@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.calcite.adapter.csv;
 
 import java.sql.*;
@@ -22,6 +21,8 @@ import java.sql.*;
 /**
  * an example to debug sql
  * sql parse; sql validate; sql optimize
+ *
+ * 加个中文试下
  */
 public class ExecuteSqlExample {
 

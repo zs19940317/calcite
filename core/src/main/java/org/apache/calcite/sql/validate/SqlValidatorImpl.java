@@ -752,9 +752,15 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
     return false;
   }
 
+  /**
+   * 添加一个中文注释
+   * @param topNode top of expression tree to be validated
+   * @return
+   */
   @Override public SqlNode validate(SqlNode topNode) {
     // EmptyScope is the top scope of all of the scopes in current sql
     // EmptyScope mainly remark the outermost scope of current sql
+    // 添加一个中文注释
     SqlValidatorScope scope = new EmptyScope(this);
     // catalogScope can see all the schemas defined in catalog.
     // CatalogScope use EmptyScope as the parentScope
@@ -764,6 +770,9 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
     final SqlNode topNode2 = validateScopedExpression(topNode, scope);
     final RelDataType type = getValidatedNodeType(topNode2);
     Util.discard(type);
+    /**
+     * 添加一个中文注释
+     */
     return topNode2;
   }
 
