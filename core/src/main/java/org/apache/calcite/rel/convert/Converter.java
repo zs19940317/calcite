@@ -45,6 +45,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * would return a {@link org.apache.calcite.plan.RelTraitSet}. But for
  * simplicity, this class only allows one trait to be converted at a
  * time; all other traits are assumed to be preserved.</p>
+ *
+ *
+ * 用来把一种 RelTrait 转换为另一种 RelTrait 的 RelNode。如 JdbcToSparkConverter
+ * 可以把 JDBC 里的 table 转换为 Spark RDD。如果需要在一个 RelNode 中处理来源于异构系统的逻辑表，
+ * Calcite 要求先用 Converter 把异构系统的逻辑表转换为同一种 Convention。
  */
 public interface Converter extends RelNode {
   //~ Methods ----------------------------------------------------------------

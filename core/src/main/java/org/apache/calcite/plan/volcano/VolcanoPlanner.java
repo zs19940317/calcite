@@ -269,7 +269,12 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
     return mapRel2Subset.get(rel) != null;
   }
 
+  /**
+   * 这是sql： SELECT NAME, COUNT(DEPTNO) FROM (SELECT D1.DEPTNO AS DEPTNO, D1.NAME AS NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) GROUP BY NAME
+   * @param rel Relational expression
+   */
   @Override public void setRoot(RelNode rel) {
+    // RelNode => RelSubSet(具有相同物理属性的表达式的集合)
     this.root = registerImpl(rel, null);
     if (this.originalRoot == null) {
       this.originalRoot = rel;
@@ -600,6 +605,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
 
   @Override public RelSubset ensureRegistered(RelNode rel, @Nullable RelNode equivRel) {
     RelSubset result;
+    // 返回rel所属的RelSubSet
     final RelSubset subset = getSubset(rel);
     if (subset != null) {
       if (equivRel != null) {
@@ -1241,8 +1247,9 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
     if (rel instanceof RelSubset) {
       return registerSubset(set, (RelSubset) rel);
     }
-
+    // mapRel2Subset 这个map存储注册过的RelNode
     assert !isRegistered(rel) : "already been registered: " + rel;
+    // 要求优化器保持一致
     if (rel.getCluster().getPlanner() != this) {
       throw new AssertionError("Relational expression " + rel
           + " belongs to a different planner than is currently being used.");
@@ -1250,7 +1257,9 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
 
     // Now is a good time to ensure that the relational expression
     // implements the interface required by its calling convention.
+    // 获取物理属性
     final RelTraitSet traits = rel.getTraitSet();
+    // Convention代表数据源
     final Convention convention = traits.getTrait(ConventionTraitDef.INSTANCE);
     assert convention != null;
     if (!convention.getInterface().isInstance(rel)

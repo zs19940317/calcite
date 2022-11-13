@@ -38,6 +38,12 @@ import static org.apache.calcite.linq4j.Nullness.castNonNull;
 /**
  * Abstract base class for a rule which converts from one calling convention to
  * another without changing semantics.
+ *
+ * 它是 RelOptRule 的子类，专门用来做数据源之间的转换（Calling convention,这是一个trait，表示当前底层的执行引擎
+ * 也就是数据源类型），
+ * ConverterRule 一般会调用对应的 Converter 来完成工作，
+ * 比如说：JdbcToSparkConverterRule 调用 JdbcToSparkConverter
+ * 来完成对 JDBC Table 到 Spark RDD 的转换。
  */
 @Value.Enclosing
 public abstract class ConverterRule

@@ -92,7 +92,10 @@ public class RelSubset extends AbstractRelNode {
   /** Optimization task state. */
   @Nullable OptimizeState taskState;
 
-  /** Cost of best known plan (it may have improved since). */
+  /**
+   * Cost of best known plan (it may have improved since).
+   * 已知最佳plan的成本
+   * */
   RelOptCost bestCost;
 
   /** The set this subset belongs to. */

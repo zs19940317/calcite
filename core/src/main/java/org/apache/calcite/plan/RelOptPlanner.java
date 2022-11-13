@@ -169,6 +169,14 @@ public interface RelOptPlanner {
    * optimized uses (or can be rewritten to use) {@code queryRel} as a
    * sub-expression then it can be optimized by using {@code tableRel}
    * instead.</p>
+   *
+   * 也就是优化器，Calcite 支持RBO（Rule-Based Optimizer） 和 CBO（Cost-Based Optimizer）。Calcite 的 RBO
+   * （HepPlanner）称为启发式优化器（heuristic implementation ），它简单地按 AST 树结构匹配所有已知规则，
+   * 直到没有规则能够匹配为止；Calcite 的
+   * CBO 称为火山式优化器（VolcanoPlanner）成本优化器也会匹配并应用规则，当整棵树的成本降低趋于稳定后，
+   * 优化完成，成本优化器依赖于比较准确的成本估算。RelOptCost
+   * 和 Statistic 与成本估算相关；
+   * -----------------------------------
    */
   void addMaterialization(RelOptMaterialization materialization);
 

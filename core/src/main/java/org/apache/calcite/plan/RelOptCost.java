@@ -25,6 +25,8 @@ package org.apache.calcite.plan;
  * plugging in their own cost models with well-defined meanings for each unit.
  * Optimizers which supply their own cost models may also extend this interface
  * with additional cost metrics such as memory usage.
+ *
+ * 优化器成本模型会依赖；
  */
 public interface RelOptCost {
   //~ Methods ----------------------------------------------------------------

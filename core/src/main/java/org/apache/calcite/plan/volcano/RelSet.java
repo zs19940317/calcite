@@ -61,6 +61,10 @@ class RelSet {
 
   //~ Instance fields --------------------------------------------------------
 
+  /**
+   * RelSet表示表达式的等价集合，这些表达式具有相同的语义，这些语义相同的表达式就
+   * 存储在rels里面
+   */
   final List<RelNode> rels = new ArrayList<>();
   /**
    * Relational expressions that have a subset in this set as a child. This
@@ -68,6 +72,10 @@ class RelSet {
    * same parent, there will be multiple entries.
    */
   final List<RelNode> parents = new ArrayList<>();
+
+  /**
+   * 具有相同物理属性的子集合
+   */
   final List<RelSubset> subsets = new ArrayList<>();
 
   /**
@@ -75,6 +83,10 @@ class RelSet {
    * set.
    */
   @MonotonicNonNull RelSet equivalentSet;
+
+  /**
+   * 原始表达式
+   */
   @MonotonicNonNull RelNode rel;
 
   /**

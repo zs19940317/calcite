@@ -39,6 +39,8 @@ import java.util.function.Predicate;
  * <p>Note that <code>children</code> means different things if it is empty or
  * it is <code>null</code>: <code>Join(Filter <b>()</b>, Any)</code> means
  * that, to match the rule, <code>Filter</code> must have no operands.</p>
+ *
+ * 决定一个RelOptRule是否可以用于特定的表达式
  */
 public class RelOptRuleOperand {
   //~ Instance fields --------------------------------------------------------

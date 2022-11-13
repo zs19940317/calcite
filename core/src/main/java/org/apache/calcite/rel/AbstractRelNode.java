@@ -267,6 +267,7 @@ public abstract class AbstractRelNode implements RelNode {
     return pw;
   }
 
+  // ensure that the sub-rel-expression 也被注册
   @Override public RelNode onRegister(RelOptPlanner planner) {
     List<RelNode> oldInputs = getInputs();
     List<RelNode> inputs = new ArrayList<>(oldInputs.size());
