@@ -22,9 +22,12 @@
 /build
 /*/build
 /example/*/build
+/example/*/bin
 /buildSrc/build
 /buildSrc/subprojects/*/build
 /site/.jekyll-cache
+/*/bin/*
+
 
 # IDEA
 /out

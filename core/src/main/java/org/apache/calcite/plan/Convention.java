@@ -23,6 +23,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Calling convention trait.
+ * 继承自 RelTrait，类型很少，代表一个单一的数据源，一个 relational expression 必须在同一个 convention 中；
  */
 public interface Convention extends RelTrait {
   /**

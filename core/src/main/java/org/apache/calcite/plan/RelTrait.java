@@ -36,6 +36,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * to the planner), you must implement {@link #hashCode()} and
  * {@link #equals(Object)} for proper {@link RelTraitDef#canonize canonization}
  * of your RelTrait objects.</p>
+ *
+ * 用来定义逻辑表的物理相关属性（physical property），
+ * 三种主要的 trait 类型是：Convention、RelCollation、RelDistribution；
  */
 public interface RelTrait {
   //~ Methods ----------------------------------------------------------------

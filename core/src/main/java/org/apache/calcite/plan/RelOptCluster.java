@@ -44,6 +44,8 @@ import static org.apache.calcite.linq4j.Nullness.castNonNull;
 /**
  * An environment for related relational expressions during the
  * optimization of a query.
+ *
+ * palnner 运行时的环境，保存上下文信息；
  */
 public class RelOptCluster {
   //~ Instance fields --------------------------------------------------------

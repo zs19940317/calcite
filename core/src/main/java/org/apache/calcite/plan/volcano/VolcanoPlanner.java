@@ -607,6 +607,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
 
   @Override public RelSubset ensureRegistered(RelNode rel, @Nullable RelNode equivRel) {
     RelSubset result;
+    // 返回rel所属的RelSubSet
     final RelSubset subset = getSubset(rel);
     if (subset != null) {
       if (equivRel != null) {
@@ -1266,8 +1267,10 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
 
     // Now is a good time to ensure that the relational expression
     // implements the interface required by its calling convention.
+    // 获取物理属性
     // 以下是关于RelTrait的一些校验，todo 后续添加说明
     final RelTraitSet traits = rel.getTraitSet();
+    // Convention代表数据源
     final Convention convention = traits.getTrait(ConventionTraitDef.INSTANCE);
     assert convention != null;
     if (!convention.getInterface().isInstance(rel)

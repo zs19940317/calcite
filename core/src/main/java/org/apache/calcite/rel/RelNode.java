@@ -80,6 +80,10 @@ import java.util.Set;
  * <p>Every relational expression must derive from {@link AbstractRelNode}. (Why
  * have the <code>RelNode</code> interface, then? We need a root interface,
  * because an interface can only derive from an interface.)</p>
+ *
+ *
+ * 代表了对数据的一个处理操作，常见的操作有 Sort、Join、Project、Filter、Scan 等。
+ * 它蕴含的是对整个 Relation 的操作，而不是对具体数据的处理逻辑。
  */
 public interface RelNode extends RelOptNode, Cloneable {
   //~ Methods ----------------------------------------------------------------

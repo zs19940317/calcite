@@ -39,6 +39,11 @@ import static java.util.Objects.requireNonNull;
  * factory.</p>
  *
  * <p>All sub-classes of RexNode are immutable.</p>
+ *
+ *
+ * 行表达式（标量表达式），蕴含的是对一行数据的处理逻辑。每个行表达式都有数据的类型。这是因为在
+ * Valdiation 的过程中，编译器会推导出表达式的结果类型。常见的行表达式包括字面量
+ * RexLiteral， 变量 RexVariable， 函数或操作符调用 RexCall 等。 RexNode 通过 RexBuilder 进行构建。
  */
 public abstract class RexNode {
 

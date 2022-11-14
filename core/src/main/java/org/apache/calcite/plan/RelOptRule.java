@@ -41,6 +41,12 @@ import java.util.function.Predicate;
  *
  * <p>The optimizer figures out which rules are applicable, then calls
  * {@link #onMatch} on each of them.</p>
+ *
+ * 根据传递给它的 RelOptRuleOperand 来对目标 RelNode 树进行规则匹配，匹配成功后，
+ * 会再次调用 ​​matches()​​ 方法（默认返回真）进行进一步检查。
+ * 如果 ​​mathes()​​ 结果为真，则调用 ​​onMatch()​​ 进行转换。
+ *
+ * RelOptRule定义了calcite规则的基本结构和方法
  */
 public abstract class RelOptRule {
   //~ Static fields/initializers ---------------------------------------------
@@ -56,6 +62,7 @@ public abstract class RelOptRule {
 
   /**
    * Root of operand tree.
+   * operand是一个树形的结构；下面的operands是一个打平的结构
    */
   private final RelOptRuleOperand operand;
 
@@ -66,6 +73,12 @@ public abstract class RelOptRule {
 
   /**
    * Flattened list of operands.
+   * 每一个RelOptRuleOperand都有层次关系，对应着要匹配的关系表达式结构；当规则匹配到了目标的关系
+   * 表达式后onMatch方法会被调用，规则生成的新的关系表达式通过RelOptRuleCall的transform方法
+   * 让优化器知道关系表达式的变化结果
+   *
+   * RelOptRuleCall包含匹配这个rule的operands的关系表达式的集合
+   * call.rels[0]是根表达式，然后回调RelOptRuleCall#transfromTo注册这个表达式
    */
   public final List<RelOptRuleOperand> operands;
 

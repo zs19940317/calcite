@@ -49,6 +49,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * <p>Otherwise, a new instance of RelTraitDef must be constructed and
  * registered with each new planner instantiated.</p>
  *
+ *
+ *主要有三种：ConventionTraitDef：用来代表数据源 RelCollationTraitDef：
+ * 用来定义参与排序的字段；RelDistributionTraitDef：用来定义数据在物理存储上的分布方式
+ * （比如：single、hash、range、random 等）
+ *
  * @param <T> Trait that this trait definition is based upon
  */
 public abstract class RelTraitDef<T extends RelTrait> {

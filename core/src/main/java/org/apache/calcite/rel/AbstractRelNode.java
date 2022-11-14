@@ -267,7 +267,7 @@ public abstract class AbstractRelNode implements RelNode {
     return pw;
   }
 
-
+  // ensure that the sub-rel-expression 也被注册
   @Override public RelNode onRegister(RelOptPlanner planner) {
     // 从input拿取下一个关系表达式
     // 比如说SELECT NAME, AGE FROM STUDENT WHERE NAME = 'SunShy'

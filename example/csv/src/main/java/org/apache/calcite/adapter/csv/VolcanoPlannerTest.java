@@ -17,38 +17,25 @@
 
 package org.apache.calcite.adapter.csv;
 
-import java.sql.*;
+import org.apache.calcite.adapter.enumerable.EnumerableRules;
+import org.apache.calcite.plan.ConventionTraitDef;
+import org.apache.calcite.plan.RelTraitDef;
+import org.apache.calcite.plan.volcano.VolcanoPlanner;
+import org.apache.calcite.rel.RelDistributionTraitDef;
+import org.apache.calcite.rel.rules.FilterJoinRule;
+import org.apache.calcite.rel.rules.PruneEmptyRules;
+import org.apache.calcite.rel.rules.ReduceExpressionsRule;
 
-/**
- * an example to debug sql
- * sql parse; sql validate; sql optimize
- */
-public class ExecuteSqlExample {
+public class VolcanoPlannerTest {
 
   public static void main(String[] args) {
 
-    try(Connection connection = DriverManager.getConnection("jdbc:calcite:model=E:\\code\\calcite" +
-        "\\example\\csv\\src\\test\\resources" +
-        "\\model.json")) {
-      Statement statement = connection.createStatement();
+    VolcanoPlanner volcanoPlanner = new VolcanoPlanner();
+    volcanoPlanner.addRelTraitDef(ConventionTraitDef.INSTANCE);
+    volcanoPlanner.addRelTraitDef(RelDistributionTraitDef.INSTANCE);
 
-      //DEPTS EMPS
-      String sql = "SELECT DEPTNO FROM DEPTS WHERE DEPTNO > 1 ORDER BY DEPTNO";
+    volcanoPlanner.addRule(PruneEmptyRules.AGGREGATE_INSTANCE);
 
-
-      ResultSet resultSet = statement.executeQuery(
-          sql);
-
-      ResultSetMetaData metaData = resultSet.getMetaData();
-
-      System.out.println(metaData.getColumnName(1));
-      System.out.println(metaData.getColumnName(2));
-
-    } catch (SQLException sqlException) {
-
-      // ignore
-    }
-
+    volcanoPlanner.addRule(EnumerableRules.ENUMERABLE_JOIN_RULE);
   }
-
 }
