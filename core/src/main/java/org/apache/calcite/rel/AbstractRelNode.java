@@ -267,10 +267,17 @@ public abstract class AbstractRelNode implements RelNode {
     return pw;
   }
 
+
   @Override public RelNode onRegister(RelOptPlanner planner) {
+    // 从input拿取下一个关系表达式
+    // 比如说SELECT NAME, AGE FROM STUDENT WHERE NAME = 'SunShy'
+    // LogicalProject是最外围的关系表达式，其input是LogicalFilter，
+    // LogicalFilter的input是LogicalTableScan，这样一个树状结构
+    // 需要将每一个子表达式全部注册上去
     List<RelNode> oldInputs = getInputs();
     List<RelNode> inputs = new ArrayList<>(oldInputs.size());
     for (final RelNode input : oldInputs) {
+      // 将每一个子表达式进行注册
       RelNode e = planner.ensureRegistered(input, null);
       assert e == input || RelOptUtil.equal("rowtype of rel before registration",
           input.getRowType(),

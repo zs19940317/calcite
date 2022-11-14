@@ -269,7 +269,11 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
     return mapRel2Subset.get(rel) != null;
   }
 
+  /**
+   * 设置根节点，会从根节点开始迭代将所有子节点也注册到planner中
+   */
   @Override public void setRoot(RelNode rel) {
+    // 注册节点到planner中，递归调用
     this.root = registerImpl(rel, null);
     if (this.originalRoot == null) {
       this.originalRoot = rel;
@@ -579,6 +583,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
   @Override public RelSubset register(
       RelNode rel,
       @Nullable RelNode equivRel) {
+    // 注册之前，确保当前表达式没有注册
     assert !isRegistered(rel) : "pre: isRegistered(rel)";
     final RelSet set;
     if (equivRel == null) {
@@ -595,6 +600,8 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
       equivRel = ensureRegistered(equivRel, null);
       set = getSet(equivRel);
     }
+    // 源头，继续进行注册，到这里其实才进入下一个逻辑表达式
+    // 其中一条线：registerImpl -> onRegister -> for (i <- rel) {ensureRegistered(i) -> register(i) -> registerImpl(i)}
     return registerImpl(rel, set);
   }
 
@@ -610,6 +617,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
       }
       result = canonize(subset);
     } else {
+      // 继续对表达式进行注册
       result = register(rel, equivRel);
     }
 
@@ -1225,6 +1233,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
   }
 
   /**
+   * 注册
    * Registers a new expression <code>exp</code> and queues up rule matches.
    * If <code>set</code> is not null, makes the expression part of that
    * equivalence set. If an identical expression is already registered, we
@@ -1242,10 +1251,14 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
       return registerSubset(set, (RelSubset) rel);
     }
 
-    // validate if this RelNode is registered
+    // 判定当前关系表达式是否已经注册
+    // 通常来讲，关系表达式树的组成部分有：LogicalAggregate，LogicalJoin
+    // LogicalTableScan, LogicalProject，LogicalFilter等
     assert !isRegistered(rel) : "already been registered: " + rel;
 
-    // there are two planners in apache calcite: volcanoPlaner or HepPlanner
+    // apache calcite中拥有两种planner，一种是HepPlanner，是基于规则的优化
+    // 一种是VolcanoPlanner，也就是当前类所表示的优化器，是基于成本的优化器
+    // 只能使用一种优化器，并且要匹配
     if (rel.getCluster().getPlanner() != this) {
       throw new AssertionError("Relational expression " + rel
           + " belongs to a different planner than is currently being used.");
@@ -1253,6 +1266,7 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
 
     // Now is a good time to ensure that the relational expression
     // implements the interface required by its calling convention.
+    // 以下是关于RelTrait的一些校验，todo 后续添加说明
     final RelTraitSet traits = rel.getTraitSet();
     final Convention convention = traits.getTrait(ConventionTraitDef.INSTANCE);
     assert convention != null;
@@ -1268,8 +1282,10 @@ public class VolcanoPlanner extends AbstractRelOptPlanner {
           + " does not have the correct number of traits: " + traits.size()
           + " != " + traitDefs.size());
     }
+    // ---- RelTrait的校验完毕
 
     // Ensure that its sub-expressions are registered.
+    // 下面一条就是开始子查询计划的注册，是一个递归的过程
     rel = rel.onRegister(this);
 
     // Record its provenance. (Rule call may be null.)

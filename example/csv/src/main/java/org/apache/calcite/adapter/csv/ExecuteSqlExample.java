@@ -27,18 +27,13 @@ public class ExecuteSqlExample {
 
   public static void main(String[] args) {
 
-    try(Connection connection = DriverManager.getConnection("jdbc:calcite:model=E:\\code\\calcite" +
-        "\\example\\csv\\src\\test\\resources" +
-        "\\model.json")) {
+    try(Connection connection =
+            DriverManager.getConnection("jdbc:calcite:model=/Users/zhangshuai/code/calcite/example/csv/src/test/resources/model.json")) {
+
       Statement statement = connection.createStatement();
-      String sql = "SELECT NAME, COUNT(DEPTNO) FROM (SELECT DEPTNO, NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) ORDER BY NAME) WHERE NAME = 'sunshy'";
-
-
-      ResultSet resultSet = statement.executeQuery(
-          sql);
-
+      String sql = "SELECT NAME, COUNT(DEPTNO) FROM (SELECT D1.DEPTNO, D1.NAME FROM DEPTS D1 inner join DEPTS D2 using(DEPTNO) WHERE D1.DEPTNO > 1 AND D1.DEPTNO > 2 ORDER BY NAME DESC ) GROUP BY NAME";
+      ResultSet resultSet = statement.executeQuery(sql);
       ResultSetMetaData metaData = resultSet.getMetaData();
-
       System.out.println(metaData.getColumnName(1));
       System.out.println(metaData.getColumnName(2));
 
